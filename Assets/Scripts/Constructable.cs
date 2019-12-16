@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Constructable : MonoBehaviour
 {
+    public bool isContructable = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +16,18 @@ public class Constructable : MonoBehaviour
     {
         
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isContructable)
+        {
+  
+            Destroy(this.gameObject);
+            
+        }
+       
+
+        
+    }
+
 }
