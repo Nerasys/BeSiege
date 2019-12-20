@@ -1,0 +1,36 @@
+Document Technique
+
+Mecanique implémentée :
+- Choix simple entre trois blocs de constructions
+- Construction d'un vehicule en fonction de ses blocs.
+- Camera Editor
+- Deplacement en fonction du forward de chaque roue
+
+Mecanique non implémentée :
+- Tir et Dégats
+- Objectifs diverses
+- Asset Bundle et UI dynamique
+
+Mecanique a améliorer :
+- Déplacement du vehicule
+- Outil d'edition ( rotation de bloc / suppression )
+
+Piste de recherche :
+- Création de Vehicule à partir d'une liste d'objets avec un type ( arme / deplacement / protection / corps )
+- Mise en place d'une physique avec un rigidbody par bloc et des fixed joints pour les raccrocher
+- Gestion de la liste d'objets avec un asset bundle et mise en place d'une UI dynamique en fonction du nombre d'objets par categorie
+- Sauvegarde et Chargement du vehicule crée ( don't destroy on load ) entre deux scènes.
+- Mise en place pour la mécanique de tir  avec un spawn devant le forward et un Add Force
+- Pour la Destruction enlever le Fixed Joint de l'objet touché.
+
+Problème Rencontré:
+- Utilisation du Fixed Joint -> Ajouter le Component dynamiquement après le positionnement du blocs.
+- Gestion des blocs en fonction des anciens déja existant.
+
+Problème potentiellement futur :
+- Physique / Fixed Joint 
+- Sauvegarde du prefabs
+
+Pour ADD un nouveau Prefabs Vehicule 
+- Enlever les contraintes en X Y et Z du noyau
+- Sur chaque bloc activer la gravité
