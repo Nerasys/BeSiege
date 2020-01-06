@@ -7,7 +7,7 @@ public class EditorMode : MonoBehaviour
     [SerializeField] Material mat;
     [SerializeField] Material buildFinish;
     [SerializeField] Material roueFinish;
-
+    int index = 1;
 
     [SerializeField] GameObject[] construction;
     [SerializeField] GameObject vehicule;
@@ -103,12 +103,15 @@ public class EditorMode : MonoBehaviour
                         build.transform.GetChild(i).gameObject.AddComponent<Constructable>();
 
                     }
-
-
+                   
+                    index = vehicule.transform.childCount;
                     build.GetComponent<Rigidbody>().isKinematic = false;
                     build.transform.SetParent(vehicule.transform);
                     build.AddComponent<FixedJoint>();
                     build.GetComponent<FixedJoint>().connectedBody = collisionSet.transform.parent.gameObject.GetComponent<Rigidbody>();
+                    build.GetComponent<IndexJoint>().index = index;
+                    build.GetComponent<IndexJoint>().indexJoint = collisionSet.transform.parent.gameObject.GetComponent<IndexJoint>().index;
+                    index++;
                     // collisionSet.SetActive(false);
 
                 }
