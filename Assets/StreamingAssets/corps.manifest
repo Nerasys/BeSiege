@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 1816783144
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8b7dbbea08b99ef3a0af6ef05ece48bb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d80e3892f72aaca244fd96aba9eedda7
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: f09a273b848578742bafc01e043dc114, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Module/Corps/ModuleCorps2.prefab
+- Assets/Prefabs/Module/Corps/ModuleCorps1.prefab
+Dependencies: []
