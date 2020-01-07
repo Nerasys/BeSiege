@@ -15,7 +15,7 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxis("Vertical") * speed*-1;
+        float horizontal = Input.GetAxis("Vertical") * speed;
        // float vertical = Input.GetAxis("Horizontal") * speed*-1;
         GetComponent<Rigidbody>().AddForce(transform.forward * horizontal);
        // GetComponent<Rigidbody>().AddForce(Vector3.forward * vertical);

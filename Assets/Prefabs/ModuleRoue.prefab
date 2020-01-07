@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 28833289486806543}
   - component: {fileID: 28833289486806542}
   - component: {fileID: 5732401859200589244}
+  - component: {fileID: 3738338481662810555}
   m_Layer: 0
   m_Name: ModuleRoue
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a35fb6fe7b93ce04fb3dc760adb32058, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +130,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0698110056e27d342956df7000477620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 50
+--- !u!114 &3738338481662810555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28833289486806544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09a273b848578742bafc01e043dc114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 0
+  indexJoint: 0
 --- !u!1 &265733436967495260
 GameObject:
   m_ObjectHideFlags: 0

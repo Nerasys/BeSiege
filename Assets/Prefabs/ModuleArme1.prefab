@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 28833289486806541}
   - component: {fileID: 28833289486806543}
   - component: {fileID: 28833289486806542}
+  - component: {fileID: 4920855096291307860}
   m_Layer: 0
-  m_Name: ModuleC1
+  m_Name: ModuleArme1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7b01f072e54d05c41b24f648645623d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,6 +111,20 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4920855096291307860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28833289486806544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09a273b848578742bafc01e043dc114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 0
+  indexJoint: 0
 --- !u!1 &500747560005344663
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public bool CameraMode = false;
     public bool EditorMode = false;
+
+    public List<GameObject> objectNoSave = new List<GameObject>();
     public static GameManager gameManager;
 
     void Awake()
