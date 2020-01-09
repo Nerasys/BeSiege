@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EditorMode : MonoBehaviour
 {
@@ -15,14 +16,15 @@ public class EditorMode : MonoBehaviour
     bool isConstruction = false;
     bool isRoue = false;
     bool isSupr = false;
-
+    bool isBoucliers = false;
+    bool isWeapon = false;
     // public bool nothingInvoke = false;
     public GameObject gameObjectBuild;
     GameObject collisionSet;
     GameManager gm;
     BundleManager bm;
     public static EditorMode editorMode;
-
+    public string nameVehicule;
     Material goodMaterial;
 
     void Awake()
@@ -52,7 +54,7 @@ public class EditorMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(gameObject.GetComponent<UIEditor>().nameVehi);
          MoveBlockPreview();
          CommandsEditor();
         if (isSupr)
@@ -92,15 +94,17 @@ public class EditorMode : MonoBehaviour
             isSupr = !isSupr;
             if (isSupr)
             {
-                gameObjectBuild.SetActive(false);
+               if(gameObjectBuild) gameObjectBuild.SetActive(false);
             }
             else
             {
                 Debug.Log("Je ne suis plus en suppression");
-                gameObjectBuild.SetActive(true);
+                if (gameObjectBuild) gameObjectBuild.SetActive(true);
             }
 
         }
+
+       
     }
 
     public void MoveBlockPreview()
@@ -116,17 +120,17 @@ public class EditorMode : MonoBehaviour
                 if (IsModuleChoose)
                 {
                     if (!isSupr)
-                    gameObjectBuild.SetActive(true);
+                   
                     collisionSet = hit.collider.gameObject;
                     gameObjectBuild.transform.position = hit.collider.gameObject.transform.position;
-
+                    gameObjectBuild.SetActive(true);
                     if (collisionSet.gameObject.name.Equals("Gauche") || collisionSet.gameObject.name.Equals("Droite"))
                     {
-                      //  gameObjectBuild.transform.forward = hit.collider.gameObject.transform.right;
+                     //gameObjectBuild.transform.forward = hit.collider.gameObject.transform.right;
                     }
                     else
                     {
-                     //   gameObjectBuild.transform.forward = hit.collider.gameObject.transform.forward;
+                     //  gameObjectBuild.transform.forward = hit.collider.gameObject.transform.forward;
                     }
 
                 }
@@ -141,38 +145,46 @@ public class EditorMode : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (IsModuleChoose)
+            if (Input.mousePosition.x > 228 && Input.mousePosition.x < 829 && Input.mousePosition.y > 128 && Input.mousePosition.y < 550)
             {
-                GameObject build = Instantiate(gameObjectBuild);
-                build.AddComponent<Rigidbody>();
-                build.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                build.AddComponent<BoxCollider>();
-                build.transform.position = new Vector3(Mathf.Round(build.transform.position.x), Mathf.Round(build.transform.position.y), Mathf.Round(build.transform.position.z));
-
-                gm.objectNoSave.Add(build);
-                build.GetComponent<MeshRenderer>().material = goodMaterial;
-
-                gameObjectBuild.SetActive(false);
-
-                for (int i = 0; i < build.transform.childCount; i++)
+                if (gameObjectBuild.activeInHierarchy)
                 {
-                    build.transform.GetChild(i).gameObject.AddComponent<Constructable>();
+
+
+
+                    if (IsModuleChoose)
+                    {
+                        GameObject build = Instantiate(gameObjectBuild);
+                        build.AddComponent<Rigidbody>();
+                        build.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                        build.AddComponent<BoxCollider>();
+                        build.transform.position = new Vector3(Mathf.Round(build.transform.position.x), Mathf.Round(build.transform.position.y), Mathf.Round(build.transform.position.z));
+
+                        gm.objectNoSave.Add(build);
+                        build.GetComponent<MeshRenderer>().material = goodMaterial;
+
+                        gameObjectBuild.SetActive(false);
+
+                        for (int i = 0; i < build.transform.childCount; i++)
+                        {
+                            build.transform.GetChild(i).gameObject.AddComponent<Constructable>();
+
+                        }
+
+                        index = vehicule.transform.childCount;
+                        build.transform.SetParent(vehicule.transform);
+                        build.AddComponent<FixedJoint>();
+                        build.GetComponent<FixedJoint>().connectedBody = collisionSet.transform.parent.gameObject.GetComponent<Rigidbody>();
+                        build.AddComponent<IndexJoint>();
+                        build.GetComponent<IndexJoint>().index = index;
+                        build.GetComponent<IndexJoint>().indexJoint = collisionSet.transform.parent.gameObject.GetComponent<IndexJoint>().index;
+
+                        index++;
+                    }
 
                 }
-
-                index = vehicule.transform.childCount;
-                build.transform.SetParent(vehicule.transform);
-                build.AddComponent<FixedJoint>();
-                build.GetComponent<FixedJoint>().connectedBody = collisionSet.transform.parent.gameObject.GetComponent<Rigidbody>();
-                build.AddComponent<IndexJoint>();
-                build.GetComponent<IndexJoint>().index = index;
-                build.GetComponent<IndexJoint>().indexJoint = collisionSet.transform.parent.gameObject.GetComponent<IndexJoint>().index;
-                if (isRoue)
-                {
-                    build.AddComponent<Move>();
-                }
-                index++;
             }
+
         }
 
     }
@@ -198,16 +210,20 @@ public class EditorMode : MonoBehaviour
     public void SetButtonConstruction(int moduleType, int numeroBlock)
     {
         isSupr = false;
+
         IsModuleChoose = true;
+     
         if (gameObjectBuild)
         {
-            gameObjectBuild.SetActive(true);
+            
             tempPos = gameObjectBuild.transform.position;
             tempRot = gameObject.transform.rotation;
         }
         Destroy(gameObjectBuild);
 
         isRoue = false;
+        isBoucliers = false;
+        isWeapon = false;
         switch (moduleType)
         {
             case (int)UIEditor.TypeButton.Corps:
@@ -216,13 +232,19 @@ public class EditorMode : MonoBehaviour
 
             case (int)UIEditor.TypeButton.Armes:
                 gameObjectBuild = Instantiate(bm.modulesArmes[numeroBlock], tempPos, tempRot);
+                isWeapon = true;
                 break;
             case (int)UIEditor.TypeButton.Roues:
                 gameObjectBuild = Instantiate(bm.modulesRoues[numeroBlock], tempPos, tempRot);
                 isRoue = true;
                 break;
-
+            case (int)UIEditor.TypeButton.Boucliers:
+                gameObjectBuild = Instantiate(bm.modulesBoucliers[numeroBlock], tempPos, tempRot);
+                isBoucliers = true;
+                break;
+              
         }
+        gameObjectBuild.SetActive(false); ;
         goodMaterial = gameObjectBuild.GetComponent<MeshRenderer>().material;
         gameObjectBuild.GetComponent<MeshRenderer>().material = mat;
 

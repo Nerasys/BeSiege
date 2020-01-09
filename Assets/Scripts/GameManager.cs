@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     GameObject uiEditor;
     [SerializeField] GameObject victory;
     GameObject flag;
+
+    public string nameVehicule;
   
     bool victoryPlaced = false;
     void Awake()
@@ -46,39 +48,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            vg.gameObject.transform.position = Vector3.zero;
-            vg.gameObject.transform.rotation = new Quaternion(0,0,0,0);
-            for (int i = 0; i < vg.gameObject.transform.childCount; i++)
-            {
-                vg.gameObject.transform.GetChild(i).GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                Debug.Log(i);
-            }
+       
 
-                victoryPlaced = false;
-
-                SceneManager.LoadScene(0);
-        }
-
-        Debug.Log(victoryPlaced);
+        
 
   
-        if(SceneManager.GetActiveScene().name != "Construction")
-        {
-            if (!victoryPlaced)
-            {
-                flag = GameObject.Find("Flag");
-                flag.AddComponent<VictoryScript>();
-                victoryPlaced = true;
-
-
-            }
-        }
-        else
-        {
-            victoryPlaced = false;
-        }
+       
     }
 
 

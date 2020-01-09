@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3095014072
+CRC: 422160858
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: afa3b7e9da8caa58fc9f910611d39c13
+    Hash: 324bf0f89b4ba9762330e12dac74f1c4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d9fe965a6b253fb9dbd3e1cb08b7d66f
+    Hash: 7c9f0c774f7d1903bd1e8c798f367eb3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -17,6 +17,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 23
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
@@ -26,8 +28,9 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 Assets:
-- Assets/Prefabs/Module/Roue/ModuleRoue.prefab
+- Assets/Prefabs/Module/Roue/ModuleRoue 1.prefab
 - Assets/Prefabs/Module/Arme/ModuleArme1.prefab
 - Assets/Prefabs/Module/Corps/ModuleCorps2.prefab
 - Assets/Prefabs/Module/Corps/ModuleCorps1.prefab
+- Assets/Prefabs/Module/Bouclier/ModuleBouclier1.prefab
 Dependencies: []

@@ -17,6 +17,7 @@ public class BundleManager : MonoBehaviour
     public List<GameObject> modulesArmes = new List<GameObject>();
     public List<GameObject> modulesRoues = new List<GameObject>();
     public List<GameObject> modulesBoucliers = new List<GameObject>();
+    public List<GameObject> modulesAutres = new List<GameObject>();
     public List<string> listScenes = new List<string>();
     static bool alreadyLoad = false;
     public string jsonFile;
@@ -47,12 +48,12 @@ public class BundleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            bundleModule = AssetBundle.LoadFromFile(filePath);
-            bundleAutre = AssetBundle.LoadFromFile(filePath2);
-            bundleScene = AssetBundle.LoadFromFile(filePath3);
-       
+        bundleModule = AssetBundle.LoadFromFile(filePath);
+        bundleAutre = AssetBundle.LoadFromFile(filePath2);
+        bundleScene = AssetBundle.LoadFromFile(filePath3);
 
-       
+
+
         for (int i = 0; i < bundleModule.GetAllAssetNames().Length; i++)
         {
             if (bundleModule.GetAllAssetNames()[i].Contains("corps"))
@@ -70,6 +71,11 @@ public class BundleManager : MonoBehaviour
                 GameObject myTempGo = bundleModule.LoadAsset<GameObject>(bundleModule.GetAllAssetNames()[i]);
                 modulesRoues.Add(myTempGo);
             }
+            if (bundleModule.GetAllAssetNames()[i].Contains("bouclier"))
+            {
+                GameObject myTempGo = bundleModule.LoadAsset<GameObject>(bundleModule.GetAllAssetNames()[i]);
+                modulesBoucliers.Add(myTempGo);
+            }
         }
 
         for (int i = 0; i < bundleScene.GetAllScenePaths().Length; i++)
@@ -79,12 +85,13 @@ public class BundleManager : MonoBehaviour
         }
 
 
-     
-    }
-        // Update is called once per frame
-        void Update()
-    {
+        for (int i = 0; i < bundleAutre.GetAllAssetNames().Length; i++)
+        {
 
-      
+            GameObject myTempGo = bundleAutre.LoadAsset<GameObject>(bundleAutre.GetAllAssetNames()[i]);
+            modulesAutres.Add(myTempGo);
+
+        }
+        // Update is called once per frame
     }
 }
