@@ -116,18 +116,17 @@ public class EditorMode : MonoBehaviour
                 if (IsModuleChoose)
                 {
                     if (!isSupr)
-                        gameObjectBuild.SetActive(true);
+                    gameObjectBuild.SetActive(true);
                     collisionSet = hit.collider.gameObject;
                     gameObjectBuild.transform.position = hit.collider.gameObject.transform.position;
 
                     if (collisionSet.gameObject.name.Equals("Gauche") || collisionSet.gameObject.name.Equals("Droite"))
                     {
-                        gameObjectBuild.transform.forward = hit.collider.gameObject.transform.right;
+                      //  gameObjectBuild.transform.forward = hit.collider.gameObject.transform.right;
                     }
-
                     else
                     {
-                        gameObjectBuild.transform.forward = hit.collider.gameObject.transform.forward;
+                     //   gameObjectBuild.transform.forward = hit.collider.gameObject.transform.forward;
                     }
 
                 }

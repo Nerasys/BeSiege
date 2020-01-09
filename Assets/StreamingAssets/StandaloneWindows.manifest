@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 1710588438
+CRC: 3523858170
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: module
+      Dependencies: {}
+    Info_1:
+      Name: scene
       Dependencies: {}

@@ -26,11 +26,16 @@ public class UIEditor : MonoBehaviour
     [SerializeField] GameObject vehicule;
     [SerializeField] GameObject UIPrefab;
     [SerializeField] GameObject UIPrefabButton;
+    [SerializeField] GameObject UIPrefabLevel;
+
     [SerializeField] GameObject UICanvasSelectionModule;
     [SerializeField] GameObject canvasEditor;
     [SerializeField] GameObject canvasMenu;
     [SerializeField] GameObject canvasSelection;
+    [SerializeField] GameObject canvasLevel;
+
     [SerializeField] public Transform listingContainer;
+    [SerializeField] public Transform listingContainerLevel;
     [SerializeField] public Transform listingContainerButton;
     List<Vehicule> listVehicule = new List<Vehicule>();
     bool alreadyHere = false;
@@ -39,34 +44,30 @@ public class UIEditor : MonoBehaviour
     string jsonString;
     List<GameObject> tempObject = new List<GameObject>();
     List<GameObject> listSave = new List<GameObject>();
+    List<GameObject> listSaveLevel = new List<GameObject>();
+
     List<GameObject> buttonModule = new List<GameObject>();
     GameManager gm;
     EditorMode em;
     BundleManager bm;
+    GameObject bundleManager;
+    public string nameVehi;
+    [SerializeField] Sprite sprite2DButton;
+    [SerializeField] Font FontButton;
     // Start is called before the first frame update
     void Start()
     {
-       
+
+      
         em = EditorMode.editorMode;
         gm = GameManager.gameManager;
         bm = BundleManager.bundleManager;
-        loadFronJSON();
+        vehicule = GameObject.Find("Vehicule");
        
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
 
-            //GameObject tempListing = Instantiate(UIPrefabButton, listingContainerButton);
-            //GameObject myGo = bundleCorps.LoadAsset<GameObject>(bundleCorps.GetAllAssetNames()[i]);
-            //Instantiate(myGo);
-
-            // tempListing.GetComponent<Button>().transform.GetChild(0).GetComponent<Text>().text = bundleCorps.GetAllAssetNames()[i];
-
-        
-    }
 
 
     public void SavePrefab()
@@ -110,7 +111,7 @@ public class UIEditor : MonoBehaviour
                 vehiculeJson.quaternions.Add(temp);
                 vehiculeJson.index.Add(vehicule.transform.GetChild(i).gameObject.GetComponent<IndexJoint>().index);
                 vehiculeJson.indexJoint.Add(vehicule.transform.GetChild(i).gameObject.GetComponent<IndexJoint>().indexJoint);
-
+                nameVehi = nameVehicule.text;
             }
 
 
@@ -140,8 +141,12 @@ public class UIEditor : MonoBehaviour
                 jsonString += JsonUtility.ToJson(listVehicule[i]);
             }
             Debug.Log(jsonString);
-            
-           File.WriteAllText("Assets/Resources/Vehicule.json", jsonString);
+            using (StreamWriter sw= new StreamWriter(Application.streamingAssetsPath + "/Vehicule.json"))
+            {
+                sw.Write(jsonString);
+
+            }
+            //File.WriteAllText(bm.jsonFile, jsonString);
            loadFronJSON();
             
          
@@ -150,8 +155,10 @@ public class UIEditor : MonoBehaviour
 
     public void NewVehicule()
     {
+       
         canvasEditor.gameObject.SetActive(true);
         canvasMenu.gameObject.SetActive(false);
+        vehicule = GameObject.Find("Vehicule");
         GameObject go = Instantiate(objectsTemp[0]);
         go.transform.SetParent(vehicule.transform);
         this.gameObject.GetComponent<EditorMode>().enabled = true;
@@ -166,7 +173,7 @@ public class UIEditor : MonoBehaviour
     }
     public void LoadVehicule()
     {
-      
+        vehicule = GameObject.Find("Vehicule");
         listVehicule.Clear();
         if (listSave.Count != 0)
         {
@@ -192,27 +199,67 @@ public class UIEditor : MonoBehaviour
     }
 
 
-    public void LaunchGame()
+    public void LoadLevel()
     {
-        if(vehicule.transform.childCount > 0)
+       
+        if (listSaveLevel.Count != 0)
+        {
+            for (int i = 0; i < listSaveLevel.Count; i++)
+            {
+                Destroy(listSaveLevel[i]);
+            }
+        }
+        canvasMenu.SetActive(false);
+        canvasLevel.SetActive(true);
+        for (int i = 0; i < bm.listScenes.Count; i++)
+        {
+            int temp = i;
+            GameObject tempListing = Instantiate(UIPrefabLevel, listingContainerLevel);
+            tempListing.transform.GetChild(0).gameObject.GetComponent<Text>().text = bm.listScenes[i];
+            tempListing.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => LoadOnLevel(bm.listScenes[temp]));
+            listSaveLevel.Add(tempListing);
+
+
+        }
+
+
+    }
+
+
+
+
+
+    public void LoadOnLevel(string path)
+    {
+
+       
+        if (vehicule.transform.childCount > 0)
         {
             SetJoint();
-            vehicule.transform.position = new Vector3(0, 2.5f, 0);
-            for(int i = 0; i < vehicule.transform.childCount; i++)
+            vehicule.transform.position = new Vector3(0, 4.5f, 0);
+            vehicule.transform.rotation = new Quaternion(vehicule.transform.rotation.x, 90, vehicule.transform.rotation.z, vehicule.transform.rotation.w);
+            for (int i = 0; i < vehicule.transform.childCount; i++)
             {
                 vehicule.transform.GetChild(i).gameObject.GetComponent<Rigidbody>().useGravity = true;
                 vehicule.transform.GetChild(i).gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
+                if (vehicule.transform.GetChild(i).gameObject.name.Contains("Roue"))
+                {
+                    vehicule.transform.GetChild(i).gameObject.AddComponent<Move>();
+
+                }
+
             }
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(path);
         }
 
     }
+
+
+  
     public void LoadOnVehicule(string name)
     {
-
-
-
+        nameVehi = name;
         for (int i = 0; i < vehicule.transform.childCount; i++)
         {
             Destroy(vehicule.transform.GetChild(i).gameObject);
@@ -233,9 +280,13 @@ public class UIEditor : MonoBehaviour
                     Quaternion qua = new Quaternion(listVehicule[i].quaternions[j].x, listVehicule[i].quaternions[j].y, listVehicule[i].quaternions[j].z, listVehicule[i].quaternions[j].w);
                     go.transform.rotation = qua;
                     go.transform.SetParent(vehicule.transform);
-                    go.AddComponent<IndexJoint>();
-                    go.AddComponent<Rigidbody>();
-                    go.AddComponent<BoxCollider>();
+
+                    if (!go.GetComponent<IndexJoint>())
+                        go.AddComponent<IndexJoint>();
+                    if (!go.GetComponent<Rigidbody>())
+                        go.AddComponent<Rigidbody>();
+                    if (!go.GetComponent<BoxCollider>())
+                        go.AddComponent<BoxCollider>();
 
                     go.GetComponent<IndexJoint>().index = listVehicule[i].index[j];
                     go.GetComponent<IndexJoint>().indexJoint = listVehicule[i].indexJoint[j];
@@ -251,6 +302,8 @@ public class UIEditor : MonoBehaviour
                    
 
                     }
+
+                  
                     go.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 
 
@@ -262,8 +315,8 @@ public class UIEditor : MonoBehaviour
 
         }
   
-        canvasSelection.SetActive(false);
-        canvasEditor.SetActive(true);
+        if(canvasSelection)canvasSelection.SetActive(false);
+        if (canvasEditor) canvasEditor.SetActive(true);
         this.gameObject.GetComponent<EditorMode>().enabled = true;
         tempObject.Clear();
         loadFronJSON();
@@ -293,7 +346,11 @@ public class UIEditor : MonoBehaviour
         {
             listVehicule.Clear();
         }
-        string jsonString = File.ReadAllText("Assets/Resources/Vehicule.json");
+        using (StreamReader sr = new StreamReader(Application.streamingAssetsPath + "/Vehicule.json"))
+        {
+            jsonString = sr.ReadToEnd();
+
+        }
         listVehicule = JsonHelper.getJsonArray<Vehicule>(jsonString);
 
         
@@ -308,7 +365,12 @@ public class UIEditor : MonoBehaviour
         canvasMenu.SetActive(true);
         this.gameObject.GetComponent<EditorMode>().enabled = false;
     }
-
+    public void QuitSelectionLevel()
+    {
+        canvasLevel.SetActive(false);
+        canvasMenu.SetActive(true);
+        this.gameObject.GetComponent<EditorMode>().enabled = false;
+    }
 
     public void QuitEdition()
     {
@@ -341,8 +403,13 @@ public class UIEditor : MonoBehaviour
             else
                 json += JsonUtility.ToJson(listVehicule[i]);
         }
-       
-        File.WriteAllText("Assets/Resources/Vehicule.json", json);
+
+
+        using (StreamWriter sw = new StreamWriter(Application.streamingAssetsPath + "/Vehicule.json"))
+        {
+            sw.Write(json);
+
+        }
         LoadVehicule();
         
     }
@@ -368,6 +435,10 @@ public class UIEditor : MonoBehaviour
                 tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = bm.modulesCorps[i].name;
                 Debug.Log("Module : " + (int)TypeButton.Corps + " Numero :" + i) ;
                 tempListing.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => em.SetButtonConstruction((int)TypeButton.Corps, temp));
+                tempListing.transform.GetChild(0).GetComponent<Image>().sprite = sprite2DButton;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().color = Color.white;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().fontSize = 40;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().font = FontButton;
                 buttonModule.Add(tempListing);
             }
         }
@@ -381,6 +452,10 @@ public class UIEditor : MonoBehaviour
                 GameObject tempListing = Instantiate(UIPrefabButton, listingContainerButton);
                 tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = bm.modulesArmes[i].name;
                 tempListing.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => em.SetButtonConstruction((int)TypeButton.Armes, temp));
+                tempListing.transform.GetChild(0).GetComponent<Image>().sprite = sprite2DButton;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().color = Color.white;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().fontSize = 40;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().font = FontButton;
                 buttonModule.Add(tempListing);
             }
         }
@@ -393,14 +468,22 @@ public class UIEditor : MonoBehaviour
                 GameObject tempListing = Instantiate(UIPrefabButton, listingContainerButton);
                 tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = bm.modulesRoues[i].name;
                 tempListing.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => em.SetButtonConstruction((int)TypeButton.Roues, temp));
+                tempListing.transform.GetChild(0).GetComponent<Image>().sprite = sprite2DButton;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().color = Color.white;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().fontSize = 40;
+                tempListing.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().font = FontButton;
                 buttonModule.Add(tempListing);
             }
         }
 
+
+
+
+
         if(indexModule == (int)TypeButton.Nothing)
         {
             UICanvasSelectionModule.SetActive(false);
-            em.gameObjectBuild.SetActive(false);
+            if(em.gameObjectBuild)em.gameObjectBuild.SetActive(false);
             em.IsModuleChoose = false;
         }
 
