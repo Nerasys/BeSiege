@@ -54,8 +54,8 @@ public class EditorMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(gameObject.GetComponent<UIEditor>().nameVehi);
-         MoveBlockPreview();
+       
+        MoveBlockPreview();
          CommandsEditor();
         if (isSupr)
         {
@@ -145,43 +145,44 @@ public class EditorMode : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (Input.mousePosition.x > 228 && Input.mousePosition.x < 829 && Input.mousePosition.y > 128 && Input.mousePosition.y < 550)
+            if (Input.mousePosition.x > 250 && Input.mousePosition.x < Screen.width-500 && Input.mousePosition.y > 128 && Input.mousePosition.y < Screen.height - 250)
             {
-                if (gameObjectBuild.activeInHierarchy)
+                if (gameObjectBuild)
                 {
-
-
-
-                    if (IsModuleChoose)
+                    if (gameObjectBuild.activeInHierarchy)
                     {
-                        GameObject build = Instantiate(gameObjectBuild);
-                        build.AddComponent<Rigidbody>();
-                        build.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                        build.AddComponent<BoxCollider>();
-                        build.transform.position = new Vector3(Mathf.Round(build.transform.position.x), Mathf.Round(build.transform.position.y), Mathf.Round(build.transform.position.z));
 
-                        gm.objectNoSave.Add(build);
-                        build.GetComponent<MeshRenderer>().material = goodMaterial;
-
-                        gameObjectBuild.SetActive(false);
-
-                        for (int i = 0; i < build.transform.childCount; i++)
+                        if (IsModuleChoose)
                         {
-                            build.transform.GetChild(i).gameObject.AddComponent<Constructable>();
+                            GameObject build = Instantiate(gameObjectBuild);
+                            build.AddComponent<Rigidbody>();
+                            build.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                            build.AddComponent<BoxCollider>();
+                            build.transform.position = new Vector3(Mathf.Round(build.transform.position.x), Mathf.Round(build.transform.position.y), Mathf.Round(build.transform.position.z));
 
+                            gm.objectNoSave.Add(build);
+                            build.GetComponent<MeshRenderer>().material = goodMaterial;
+
+                            gameObjectBuild.SetActive(false);
+
+                            for (int i = 0; i < build.transform.childCount; i++)
+                            {
+                                build.transform.GetChild(i).gameObject.AddComponent<Constructable>();
+
+                            }
+
+                            index = vehicule.transform.childCount;
+                            build.transform.SetParent(vehicule.transform);
+                            build.AddComponent<FixedJoint>();
+                            build.GetComponent<FixedJoint>().connectedBody = collisionSet.transform.parent.gameObject.GetComponent<Rigidbody>();
+                            build.AddComponent<IndexJoint>();
+                            build.GetComponent<IndexJoint>().index = index;
+                            build.GetComponent<IndexJoint>().indexJoint = collisionSet.transform.parent.gameObject.GetComponent<IndexJoint>().index;
+
+                            index++;
                         }
 
-                        index = vehicule.transform.childCount;
-                        build.transform.SetParent(vehicule.transform);
-                        build.AddComponent<FixedJoint>();
-                        build.GetComponent<FixedJoint>().connectedBody = collisionSet.transform.parent.gameObject.GetComponent<Rigidbody>();
-                        build.AddComponent<IndexJoint>();
-                        build.GetComponent<IndexJoint>().index = index;
-                        build.GetComponent<IndexJoint>().indexJoint = collisionSet.transform.parent.gameObject.GetComponent<IndexJoint>().index;
-
-                        index++;
                     }
-
                 }
             }
 
